@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SFP Derivative Application: Moisture Loss</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: auto; }
+        #info { margin-top: 20px; padding: 15px; border: 1px solid #ddd; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kadar Kehilangan Lembapan Produk Agro (Mango Slices)</h1>
+        <p>Fungsi Kelembapan: <b>f(x) = -0.5x² + 10x + 80</b></p>
+        <p>Formula Terbitan (Kadar Perubahan): <b>f'(x) = -1x + 10</b></p>
+        <canvas id="moistureChart"></canvas>
+        <div id="info">Klik pada garisan graf untuk melihat kadar kehilangan lembapan pada masa tersebut.</div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('moistureChart').getContext('2d');
+        const labels = Array.from({length: 12}, (_, i) => i);
+        const data = labels.map(x => -0.5 * Math.pow(x, 2) + 10 * x + 80);
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{ label: 'Peratus Lembapan (%)', data: data, borderColor: 'blue', fill: false }]
+            },
+            options: {
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const x = labels[index];
+                        const derivative = -1 * x + 10;
+                        document.getElementById('info').innerHTML = 
+                            `Pada jam ke-${x}: Kadar kehilangan lembapan ialah <b>${derivative.toFixed(2)}% per jam</b>. 
+                            Ini bermakna proses pengeringan sedang berlaku pada kelajuan tersebut.`;
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
